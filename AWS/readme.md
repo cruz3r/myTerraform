@@ -28,3 +28,14 @@ calling outpus after "terraform apply"
 - terraform output public_ip
 
 Looking over chapter 2 I found that copying a single deployment to a cluster doesn't work well. There property names that change which cause confusion. Most can be found by looking closely at what is in the book, and looking at the errors in the planning stage.
+
+ToDo: Look at using ALB instead of ELB
+
+##Not Used anymore##
+Managing state
+terraform.exe remote config `
+    -backend=s3 `
+    -backend-config="bucket=cruz3r-state" `
+    -backend-config="key=global/s3/terraform.tfstate" `
+    -backend-config="region=us-east-1" `
+    -backend-config="encrypt=true"

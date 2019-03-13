@@ -1,4 +1,10 @@
-
+terraform {
+  backend "s3" {
+    bucket = "cruz3r-state"
+    key    = "global/s3/SingleServer.tfstate"
+    region = "us-east-1"
+  }
+}
 resource "aws_instance" "example" {
     ami = "ami-40d28157"
     instance_type = "t2.micro"

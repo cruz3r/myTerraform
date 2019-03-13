@@ -1,6 +1,10 @@
 
 terraform {
-  required_version = ">= 0.8, < 0.12"
+  backend "s3" {
+    bucket = "cruz3r-state"
+    key    = "global/s3/Cluster.tfstate"
+    region = "us-east-1"
+  }
 }
 resource "aws_launch_configuration" "example" {
     image_id = "ami-40d28157"
