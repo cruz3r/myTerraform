@@ -26,3 +26,5 @@ How did I get Public_IP? It is an **Attribute Reference** and can be found in th
 calling outpus after "terraform apply"
 
 - terraform output public_ip
+
+Looking over chapter 2 I found that copying a single deployment to a cluster doesn't work well. There property names that change which cause confusion. Most can be found by looking closely at what is in the book, and looking at the errors in the planning stage.
