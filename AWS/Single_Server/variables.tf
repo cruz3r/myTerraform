@@ -3,7 +3,3 @@ variable "server_port" {
   type = "string"
   default = "8080"
 }
-
-output "public_ip" {
-  value = "http://${aws_instance.example.public_ip}:${var.server_port}"
-}
