@@ -9,14 +9,19 @@ function set-envvar{
         [string]$KeyVault = "kv-cruz3r",
         [string]$subscriptionname = 'Visual Studio Premium with MSDN'
     )
-
+    $ErrorActionPreference = "Stop"
     if ($provider -eq "AWS"){
+        try{
         Write-Output "AWS Env Variables"
         Login-AzureRmAccount -Credential $Credential | out-null
         Get-AzureRmSubscription -SubscriptionName $subscriptionname| Set-AzureRmContext | Out-Null
         $env:AWS_ACCESS_KEY_ID = (Get-AzureKeyVaultSecret  -vaultName $KeyVault -Name "awsAccessKeyId" ).SecretValueText
         $env:AWS_SECRET_ACCESS_KEY = (Get-AzureKeyVaultSecret  -vaultName $KeyVault -Name "awsSecretAccessKey" ).SecretValueText
+        }catch{
+            $Error[0].Message
+        }
     }elseif ($provider -eq "Azure"){
+        try{
         Write-Output "Azure Env Variables"
         Login-AzureRmAccount -Credential $Credential | out-null
         Get-AzureRmSubscription -SubscriptionName $subscriptionname| Set-AzureRmContext | Out-Null
@@ -24,6 +29,9 @@ function set-envvar{
         $env:ARM_CLIENT_ID = (Get-AzureKeyVaultSecret  -vaultName $KeyVault -Name "azureclientid" ).SecretValueText
         $env:ARM_CLIENT_SECRET = (Get-AzureKeyVaultSecret  -vaultName $KeyVault -Name "asureclientsecret" ).SecretValueText
         $env:ARM_TENANT_ID = (Get-AzureKeyVaultSecret  -vaultName $KeyVault -Name "azuretenantid" ).SecretValueText
+        }catch{
+            $Error[0].Message
+        }
     }
 }
 
