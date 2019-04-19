@@ -1,3 +1,14 @@
+data "azurerm_virtual_network" "enetwork" {
+  name = "vnet-tf-1"
+  resource_group_name = "Terraform-NW"
+}
+
+data "azurerm_subnet" "esubnet" {
+  name                 = "WebServers"
+  virtual_network_name = "${data.azurerm_virtual_network.enetwork.name}"
+  resource_group_name  = "${data.azurerm_virtual_network.enetwork.resource_group_name}"
+}
+
 resource "azurerm_resource_group" "rg" {
         name = "${var.name}-RG-${var.count_id}"
         location = "eastus"
@@ -15,23 +26,24 @@ resource "azurerm_automation_account" "aa" {
     name = "Basic"
   }
 }
-resource "azurerm_virtual_network" "network" {
-    name                = "${var.name}-Vnet-${var.count_id}"
-    address_space       = ["10.0.0.0/16"]
-    location            = "eastus"
-    resource_group_name = "${azurerm_resource_group.rg.name}"
 
-    tags {
-        environment = "Terraform Demo"
-    }
-}
+#resource "azurerm_virtual_network" "network" {
+#    name                = "${var.name}-Vnet-${var.count_id}"
+#    address_space       = ["192.168.1.0/24"]
+#    location            = "eastus"
+#    resource_group_name = "${azurerm_resource_group.rg.name}"
+#
+#    tags {
+#        environment = "Terraform Demo"
+#    }
+#}
 
-resource "azurerm_subnet" "subnet" {
-    name                 = "${var.name}-subnet-${var.count_id}"
-    resource_group_name  = "${azurerm_resource_group.rg.name}"
-    virtual_network_name = "${azurerm_virtual_network.network.name}"
-    address_prefix       = "10.0.2.0/24"
-}
+#resource "azurerm_subnet" "subnet" {
+#    name                 = "${var.name}-subnet-${var.count_id}"
+#    resource_group_name  = "${azurerm_resource_group.rg.name}"
+#    virtual_network_name = "${azurerm_virtual_network.network.name}"
+#    address_prefix       = "192.168.1.0/28"
+#}
 
 resource "azurerm_public_ip" "publicip" {
     name                         = "${var.name}-publicIP-${var.count_id}"
@@ -47,18 +59,18 @@ resource "azurerm_network_security_group" "nsg" {
     name                = "${var.name}-NSG-${var.count_id}"
     location            = "eastus"
     resource_group_name = "${azurerm_resource_group.rg.name}"
-
-    security_rule {
-        name                       = "SSH"
-        priority                   = 1001
-        direction                  = "Inbound"
-        access                     = "Allow"
-        protocol                   = "Tcp"
-        source_port_range          = "*"
-        destination_port_range     = "22"
-        source_address_prefix      = "*"
-        destination_address_prefix = "*"
-    },
+# Not needed now that going through VPN
+#    security_rule {
+#        name                       = "SSH"
+#        priority                   = 1001
+#        direction                  = "Inbound"
+#        access                     = "Allow"
+#        protocol                   = "Tcp"
+#        source_port_range          = "*"
+#        destination_port_range     = "22"
+#        source_address_prefix      = "*"
+#        destination_address_prefix = "*"
+#    },
     security_rule {
         name                       = "HTTP"
         priority                   = 1002
@@ -84,7 +96,7 @@ resource "azurerm_network_interface" "nic" {
 
     ip_configuration {
         name                          = "myNicConfiguration"
-        subnet_id                     = "${azurerm_subnet.subnet.id}"
+        subnet_id                     = "${data.azurerm_subnet.esubnet.id}"
         private_ip_address_allocation = "Dynamic"
         public_ip_address_id          = "${azurerm_public_ip.publicip.id}"
     }
