@@ -1,14 +1,5 @@
-variable "rg_name" {
-  description = "This is the Resource Group Name"
-  default = "rg-tf-k8s"
-}
-
-variable "client_id" {
-    description = ""
-}
-variable "client_secret" {
-    description = ""
-}
+variable "client_id" {}
+variable "client_secret" {}
 
 variable "location" {
   description = "AZ Location"

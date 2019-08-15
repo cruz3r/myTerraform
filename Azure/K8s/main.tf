@@ -69,3 +69,17 @@ resource "azurerm_container_registry" "acr" {
   sku                      = "Basic"
   admin_enabled            = false
 }
+
+resource "azurerm_public_ip" "pip" {
+  name                    = "public_ip"
+  location                = "${azurerm_resource_group.k8s.location}"
+  resource_group_name     = "${azurerm_kubernetes_cluster.k8s.node_resource_group}"
+  allocation_method       = "Static"
+  idle_timeout_in_minutes = 30
+
+  tags = {
+    environment = "Dev"
+  }
+}
+
+

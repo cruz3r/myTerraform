@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: packer_test
+deploymentspec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: packer_test
+    spec:
+      containers:
+      - name: packer_test
+        image: azk8sregistry.azurecr.io/packer_test:v1
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        imagePullSecrets:
+        - name: myregistrykey

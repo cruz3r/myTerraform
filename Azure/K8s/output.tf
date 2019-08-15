@@ -25,3 +25,19 @@ output "kube_config" {
 output "host" {
     value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.host}"
 }
+
+output "resource_group" {
+  value = "${azurerm_resource_group.k8s.id}"
+}
+
+output "k8s_container" {
+  value = "${azurerm_container_registry.acr.id}"
+}
+
+output "k8s_Node_RG" {
+  value = "${azurerm_kubernetes_cluster.k8s.node_resource_group}"
+}
+
+output "pip" {
+  value = "${azurerm_public_ip.pip.ip_address}"
+}
